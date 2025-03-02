@@ -3,26 +3,16 @@ on: [push, pull_request]
 jobs:
   build:
     name: Build
+    timeout-minutes: 30
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        go: ["stable"]
     steps:
-      - name: Set up Go ${{ matrix.go }}
-        uses: actions/setup-go@v4
-        with:
-          go-version: ${{ matrix.go }}
-
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: build cache
-        uses: actions/cache@v3
+      - name: Set up Go
+        uses: actions/setup-go@v5
         with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
+          go-version: "stable"
 
       - name: Get dependencies
         run: |
